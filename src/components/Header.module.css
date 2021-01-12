@@ -1,0 +1,46 @@
+.heading {
+  justify-content: space-between;
+  margin: 0;
+}
+
+.heading h1 {
+  padding: 15px 15px;
+}
+
+.heading div {
+  width: 94%;
+  display: flex;
+}
+.heading div input {
+  border: 1px solid gray;
+  padding: 15px;
+  margin: 10px 30px;
+  background: white;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  border-radius: 5px;
+}
+.heading div input {
+  display: flex;
+  width: 82%;
+  margin-bottom: 50px;
+}
+.heading div button {
+  border: 1px solid gray;
+  padding: 10px;
+  margin: 10px 0px;
+  background: rgb(9, 226, 161);
+  align-items: center;
+  align-content: center;
+  border-radius: 5px;
+  height: 3rem;
+  font-size: 14px;
+  width: 18%;
+  cursor: pointer;
+}
+.heading div button:hover {
+  background-color: aqua;
+  transform: scale(1.1);
+}
