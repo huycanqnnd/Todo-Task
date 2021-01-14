@@ -36,7 +36,7 @@ function App() {
     tas.completeDate = new Date().getTime();
     setTasks((tasks) =>
       [tas, ...tasks.filter((item) => item.id !== id)].sort(
-        (a, b) => a.id - b.id
+        (a, b) => b.completeDate - a.completeDate
       )
     );
   };
@@ -66,7 +66,7 @@ function App() {
 
     setTasks((tasks) =>
       [...tasks.filter((item) => item.id !== id), tas].sort(
-        (a, b) => b.isFavorite - a.isFavorite
+        (a, b) => b.isFavorite - a.isFavorite || a.createDate - b.createDate
       )
     );
   };
