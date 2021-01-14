@@ -46,10 +46,16 @@ function App() {
 
   const onHandleFavorite = (id) => {
     const findId = tasks.find((item) => item.id === id);
-
-    findId.isFavorite = true;
-
-    setTasks((tasks) => [findId, ...tasks.filter((item) => item.id !== id)]);
+    if (findId.isFavorite === true) {
+      findId.isFavorite = false;
+    } else {
+      findId.isFavorite = true;
+    }
+    setTasks((tasks) =>
+      [findId, ...tasks.filter((item) => item.id !== id)].sort(
+        (a, b) => b.isFavorite - a.isFavorite || a.createDate - b.createDate
+      )
+    );
   };
 
   const maskTaskUncompleted = (id) => {
@@ -57,6 +63,7 @@ function App() {
 
     tas.isCompleted = false;
     tas.completeDate = "";
+
     setTasks((tasks) =>
       [...tasks.filter((item) => item.id !== id), tas].sort(
         (a, b) => b.isFavorite - a.isFavorite

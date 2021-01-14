@@ -7,7 +7,7 @@ function TaskList({ incompleteItems, maskTaskCompleted, onHandleFavorite }) {
     <div className="completed">
       <section className="listTask">
         <div className="totalComplete">
-          <span> Completed </span>
+          <span> InComplete </span>
           <span>{incompleteItems.length}</span>
         </div>
         <ul>
