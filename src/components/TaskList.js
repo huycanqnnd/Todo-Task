@@ -1,67 +1,41 @@
-import React, { useState } from "react";
-import TaskItem from "./TaskItem";
+import React from "react";
 
-function TaskList({ listTask }) {
-  let [listData, setListData] = useState({ list: listTask });
+import { StarOutlined, StarTwoTone } from "@ant-design/icons";
 
-  function markTasksComplete(id) {
-    setListData({
-      ...listData,
-      list: listTask.find((p) => {
-        if (p.id === id) {
-          p.isComplete = true;
-          p.completeDate = new Date().getTime();
-        }
-      }),
-    });
-  }
-
-  function markTasksFavorite(id) {
-    setListData({
-      ...listData,
-      list: listTask.find((p) => {
-        if (p.id === id && p.isComplete === false) {
-          p.favorite = !p.favorite;
-        }
-      }),
-    });
-  }
-
-  let listUnComplete = listTask.filter((p) => p.isComplete === false);
-
-  var item = listUnComplete
-    .sort(
-      ({ createDate: previous }, { createDate: current }) => previous - current
-    )
-    .sort(({ favorite: previous }, { favorite: current }) => current - previous)
-    .map((p) => {
-      return (
-        <TaskItem
-          key={p.id}
-          id={p.id}
-          name={p.name}
-          createDate={p.createDate}
-          favorite={p.favorite}
-          completeDate={p.completeDate}
-          isComplete={p.isComplete}
-          onChangeComplete={() => markTasksComplete(p.id)}
-          onChangeFavorite={() => markTasksFavorite(p.id)}
-        ></TaskItem>
-      );
-    });
-
-  console.log(item);
-
+function TaskList({ incompleteItems, maskTaskCompleted, onHandleFavorite }) {
   return (
-    <div>
+    <div className="completed">
       <section className="listTask">
         <div className="totalComplete">
-          <span> Tasks: </span>
-          <span> {listUnComplete.length} task </span>
+          <span> Completed </span>
+          <span>{incompleteItems.length}</span>
         </div>
-        {item}
+        <ul>
+          {incompleteItems.map((task) => {
+            return (
+              <li key={task.id}>
+                <div className="wrapItem">
+                  <input
+                    name={task.text}
+                    type="checkbox"
+                    onClick={() => maskTaskCompleted(task.id)}
+                  />
+                  <label>{task.text}</label>
+                  <span>
+                    {task.isFavorite === true ? (
+                      <StarTwoTone onClick={() => onHandleFavorite(task.id)} />
+                    ) : (
+                      <StarOutlined onClick={() => onHandleFavorite(task.id)} />
+                    )}
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </section>
     </div>
   );
 }
+
 export default TaskList;

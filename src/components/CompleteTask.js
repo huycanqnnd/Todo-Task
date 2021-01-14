@@ -1,55 +1,38 @@
-import React, { useState } from "react";
-import TaskItem from "./TaskItem";
+import React from "react";
+import { StarOutlined, StarTwoTone } from "@ant-design/icons";
 
-function CompleteTask({ listTask }) {
-  let [listData, setListTask] = useState({ list: listTask });
-
-  function maskTasksUnComplete(id) {
-    console.log("id", id);
-
-    setListTask({
-      ...listData,
-      list: listTask.find((p) => {
-        if (p.id === id) {
-          p.isComplete = false;
-          p.completeDate = "";
-        }
-      }),
-    });
-  }
-
-  let listComplete = listTask.filter((p) => p.isComplete === true);
-
-  var itemComplete = listComplete
-    .sort(
-      ({ completeDate: previous }, { completeDate: current }) =>
-        current - previous
-    )
-    .map((p) => {
-      return (
-        <TaskItem
-          key={p.id}
-          id={p.id}
-          name={p.name}
-          createDate={p.createDate}
-          favorite={p.favorite}
-          completeDate={p.completeDate}
-          isComplete={p.isComplete}
-          onChangeComplete={() => maskTasksUnComplete(p.id)}
-        ></TaskItem>
-      );
-    });
-
-  console.log(itemComplete);
-
+function CompleteTask({ completeItems, maskTaskUncompleted }) {
   return (
     <div className="completed">
       <section className="listTask">
         <div className="totalComplete">
-          <span> Completed: </span>
-          <span> {listComplete.length} task </span>
+          <span> Completed </span>
+          <span>{completeItems.length}</span>
         </div>
-        {itemComplete}
+        <ul>
+          {completeItems.map((task) => {
+            return (
+              <li key={task.id} className="completed">
+                <div className="wrapItem">
+                  <input
+                    name={task.text}
+                    type="checkbox"
+                    defaultChecked={true}
+                    onClick={() => maskTaskUncompleted(task.id)}
+                  />
+                  <label>{task.text}</label>
+                  <span>
+                    {task.isFavorite === true ? (
+                      <StarTwoTone />
+                    ) : (
+                      <StarOutlined />
+                    )}
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </section>
     </div>
   );

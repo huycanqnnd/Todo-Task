@@ -2,18 +2,18 @@ import React from "react";
 import classes from "./Header.module.css";
 import { PlusOutlined } from "@ant-design/icons";
 
-function Header({ addTaskItem, inputTask, setInputTask }) {
+function Header({ handleChange, addTask, task }) {
   return (
     <header className={classes.heading}>
-      <h1>To-do Tasks</h1>
+      <h1>Todo Tasks</h1>
       <div>
         <input
           type="text"
           placeholder="Add a task"
-          value={inputTask}
-          onChange={(event) => setInputTask(event.target.value)}
+          value={task}
+          onChange={handleChange}
         />
-        <button onClick={() => addTaskItem()}>
+        <button onClick={() => addTask()}>
           <PlusOutlined />
         </button>
       </div>

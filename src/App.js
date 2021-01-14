@@ -7,47 +7,77 @@ import { v4 as uuidv4 } from "uuid";
 import CompleteTask from "./components/CompleteTask";
 
 function App() {
-  let [inputTask, setInputTask] = useState("");
+  const [task, setTask] = useState("");
+  const [tasks, setTasks] = useState([]);
+  // const [starId, setStarId] = useState("");
 
-  let [listTask, setListTask] = useState({ list: [] });
+  const handleChange = (e) => {
+    setTask(e.target.value);
+  };
 
-  function addTaskItem() {
-    let newList = [];
-    if (inputTask) {
-      let itemFilter = listTask.list.filter((p) => {
-        if (p.name.toUpperCase() === inputTask.toUpperCase()) {
-          return p;
-        } else return null;
-      });
-      console.log("item", itemFilter);
-      if (itemFilter.length <= 0) {
-        var newTast = {
-          id: uuidv4(),
-          name: inputTask,
-          createDate: new Date().getTime(),
-          favorite: false,
-          isComplete: false,
-          completeDate: "",
-        };
+  const addTask = () => {
+    setTasks([
+      ...tasks,
+      {
+        id: uuidv4(),
+        text: task,
+        createDate: new Date().getTime(),
+        completed: false,
+        isFavorite: false,
+        completeDate: "",
+      },
+    ]);
+    setTask("");
+  };
 
-        newList = listTask.list.concat(newTast);
+  const maskTaskCompleted = (id) => {
+    const tas = tasks.find((tas) => tas.id === id);
+    tas.isCompleted = true;
+    tas.completeDate = new Date().getTime();
+    setTasks((tasks) =>
+      [tas, ...tasks.filter((item) => item.id !== id)].sort(
+        (a, b) => a.id - b.id
+      )
+    );
+  };
 
-        setListTask({ ...listTask, list: newList });
-      }
-    }
-    setInputTask("");
-  }
+  const incompleteItems = tasks.filter((item) => !item.isCompleted);
+  console.log(incompleteItems);
+
+  const onHandleFavorite = (id) => {
+    const findId = tasks.find((item) => item.id === id);
+
+    findId.isFavorite = true;
+
+    setTasks((tasks) => [findId, ...tasks.filter((item) => item.id !== id)]);
+  };
+
+  const maskTaskUncompleted = (id) => {
+    const tas = tasks.find((tas) => tas.id === id);
+
+    tas.isCompleted = false;
+    tas.completeDate = "";
+    setTasks((tasks) =>
+      [...tasks.filter((item) => item.id !== id), tas].sort(
+        (a, b) => b.isFavorite - a.isFavorite
+      )
+    );
+  };
+
+  const completeItems = tasks.filter((item) => item.isCompleted);
+
   return (
     <div className="App">
-      <Header
-        inputTask={inputTask}
-        setInputTask={setInputTask}
-        addTaskItem={() => addTaskItem()}
+      <Header task={task} handleChange={handleChange} addTask={addTask} />
+      <TaskList
+        maskTaskCompleted={maskTaskCompleted}
+        incompleteItems={incompleteItems}
+        onHandleFavorite={onHandleFavorite}
       />
-
-      <TaskList listTask={listTask.list} />
-
-      <CompleteTask listTask={listTask.list} />
+      <CompleteTask
+        completeItems={completeItems}
+        maskTaskUncompleted={maskTaskUncompleted}
+      />
     </div>
   );
 }
